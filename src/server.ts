@@ -19,7 +19,7 @@ import { WSDL } from "./wsdl";
 import { BindingElement, IPort } from "./wsdl/elements";
 import * as formidable from "formidable";
 const multipart = require('parse-multipart-data');
-
+const contentTypeParser = require("content-type-parser");
 let zlib;
 try {
   zlib = require("zlib");
@@ -324,15 +324,12 @@ export class Server extends EventEmitter {
         res.setHeader("Content-Type", "application/xml");
       }
 
+      const parsedContentType = contentTypeParser.parse(req.headers["content-type"]);
+
       if (req.headers["content-type"].startsWith("multipart/form-data") ) {
-        const form = new formidable.IncomingForm();
-        form.parse(req, (err, fields, files) => {
-          if (err) {
-            this._sendHttpResponse(res, 500, err);
-          } else {
-            this._processRequestXml(req, res, fields.xml);
-          }
-        });
+        const boundary = parsedContentType.get("boundary");
+
+        const parts = multipart.parse(req.body, boundary);
       }
       // request body is already provided by an express middleware
       // in this case unzipping should also be done by the express middleware itself

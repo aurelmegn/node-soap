@@ -324,7 +324,7 @@ export class Server extends EventEmitter {
         res.setHeader("Content-Type", "application/xml");
       }
 
-      if (req.headers["content-type"] === "multipart/form-data") {
+      if (req.headers["content-type"].startsWith("multipart/form-data") ) {
         const form = new formidable.IncomingForm();
         form.parse(req, (err, fields, files) => {
           if (err) {

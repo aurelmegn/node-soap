@@ -326,21 +326,7 @@ export class Server extends EventEmitter {
 
       const parsedContentType = contentTypeParser(req.headers["content-type"]);
 
-      if (req.headers["content-type"].startsWith("multipart/form-data") ) {
-        const boundary = parsedContentType.get("boundary");
 
-        // let body = Object.create(null)
-        // req.on('readable', function() {
-        //   body += req.read();
-        // });
-
-        // let body = '';
-        // req.on('data', (chunk) => {
-        //   body += chunk;
-        // });
-        //
-        // const parts = multipart.parse(req.body, boundary);
-      }
       // request body is already provided by an express middleware
       // in this case unzipping should also be done by the express middleware itself
       if (req.body && req.body.length > 0) {
@@ -360,6 +346,12 @@ export class Server extends EventEmitter {
       });
       source.on("end", () => {
         const xml = Buffer.concat(chunks).toString();
+
+        if (req.headers["content-type"].startsWith("multipart/form-data") ) {
+          const boundary = parsedContentType.get("boundary");
+          const parts = multipart.parse(xml, boundary);
+        }
+
         this._processRequestXml(req, res, xml);
       });
     } else {

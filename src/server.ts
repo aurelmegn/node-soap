@@ -324,7 +324,7 @@ export class Server extends EventEmitter {
         res.setHeader("Content-Type", "application/xml");
       }
 
-      const parsedContentType = contentTypeParser.parse(req.headers["content-type"]);
+      const parsedContentType = contentTypeParser(req.headers["content-type"]);
 
       if (req.headers["content-type"].startsWith("multipart/form-data") ) {
         const boundary = parsedContentType.get("boundary");

@@ -334,12 +334,12 @@ export class Server extends EventEmitter {
         //   body += req.read();
         // });
 
-        let body = '';
-        req.on('data', (chunk) => {
-          body += chunk;
-        });
-
-        const parts = multipart.parse(req.body, boundary);
+        // let body = '';
+        // req.on('data', (chunk) => {
+        //   body += chunk;
+        // });
+        //
+        // const parts = multipart.parse(req.body, boundary);
       }
       // request body is already provided by an express middleware
       // in this case unzipping should also be done by the express middleware itself

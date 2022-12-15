@@ -345,7 +345,8 @@ export class Server extends EventEmitter {
         chunks.push(chunk);
       });
       source.on("end", () => {
-        const xml = Buffer.concat(chunks).toString();
+        const bxml = Buffer.concat(chunks);
+        const xml = bxml.toString();
 
         if (req.headers["content-type"].startsWith("multipart/form-data") ) {
           const boundary = parsedContentType.get("boundary");

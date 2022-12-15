@@ -346,13 +346,18 @@ export class Server extends EventEmitter {
       });
       source.on("end", () => {
         const bxml = Buffer.concat(chunks);
-        const xml = bxml.toString();
+        let xml = "";
 
         if (req.headers["content-type"].startsWith("multipart/form-data") ) {
           const boundary = parsedContentType.get("boundary");
           const parts = multipart.parse(bxml, boundary);
 
-          console.log(parts)
+          // We make the assumption that the first part is the XML
+          if (parts.length > 0) {
+            xml = parts[0].body.toString();
+          }
+        } else {
+          xml = bxml.toString();
         }
 
         this._processRequestXml(req, res, xml);

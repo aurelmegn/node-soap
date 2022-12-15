@@ -329,6 +329,11 @@ export class Server extends EventEmitter {
       if (req.headers["content-type"].startsWith("multipart/form-data") ) {
         const boundary = parsedContentType.get("boundary");
 
+        let body = Object.create(null)
+        req.on('readable', function() {
+          body += req.read();
+        });
+
         const parts = multipart.parse(req.body, boundary);
       }
       // request body is already provided by an express middleware

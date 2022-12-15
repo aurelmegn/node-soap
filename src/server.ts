@@ -329,9 +329,14 @@ export class Server extends EventEmitter {
       if (req.headers["content-type"].startsWith("multipart/form-data") ) {
         const boundary = parsedContentType.get("boundary");
 
-        let body = Object.create(null)
-        req.on('readable', function() {
-          body += req.read();
+        // let body = Object.create(null)
+        // req.on('readable', function() {
+        //   body += req.read();
+        // });
+
+        let body = '';
+        req.on('data', (chunk) => {
+          body += chunk;
         });
 
         const parts = multipart.parse(req.body, boundary);

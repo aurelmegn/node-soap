@@ -351,6 +351,8 @@ export class Server extends EventEmitter {
         if (req.headers["content-type"].startsWith("multipart/form-data") ) {
           const boundary = parsedContentType.get("boundary");
           const parts = multipart.parse(bxml, boundary);
+
+          console.log(parts)
         }
 
         this._processRequestXml(req, res, xml);
